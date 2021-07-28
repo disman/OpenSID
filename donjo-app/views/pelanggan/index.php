@@ -149,8 +149,8 @@
 													<a target="_blank" href="<?= "{$host}/api/v1/pelanggan/pemesanan/faktur?invoice={$pemesanan->faktur}&token={$token}"?>" class="btn btn-social btn-flat bg-purple btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Cetak" data-title="Cetak Laporan"><i class="fa fa-print"></i>Cetak</a>
 												</td>
 												<td>
-													<a href="<?= "#" . str_replace('/', '-', $pemesanan->faktur) ?>" data-toggle="modal" data-target="<?= "#" . str_replace('/', '-', $pemesanan->faktur) ?>"><?= $pemesanan->faktur ?></a>
-													<div class="modal fade" id="<?= str_replace('/', '-', $pemesanan->faktur) ?>" style="display: none;">
+													<a href="#" data-toggle="modal" data-target="<?= "#" . str_replace('/', '-', $pemesanan->faktur) ?>"><?= $pemesanan->faktur ?></a>
+													<div class="modal fade pemesanan" id="<?= str_replace('/', '-', $pemesanan->faktur) ?>" style="display: none;">
 														<div class="modal-dialog modal-lg">
 															<div class="modal-content">
 																<div class="modal-header">
@@ -170,6 +170,7 @@
 																							<th>Layanan</th>
 																							<th>Harga</th>
 																							<th>Keterangan</th>
+																							<th>Ketentuan</th>
 																						</tr>
 																					</thead>
 																					<tbody>
@@ -180,6 +181,9 @@
 																								<td class="aksi"><?= $layanan->nama ?></td>
 																								<td align="right"><?= rupiah($layanan->harga) ?></td>
 																								<td><?= $layanan->deskripsi ?></td>
+																								<td class="padat">
+																									<a href="#" class="btn btn-social btn-flat bg-purple btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Lihat" data-title="Ketentuan <?= $layanan->nama; ?>" data-ketentuan="<?= $layanan->ketentuan; ?>" data-toggle="modal" data-target="#modal_ketentuan"><i class="fa fa-file"></i>Lihat</a>
+																								</td>
 																							</tr>
 																							<?php $numberLayanan++ ?>
 																						<?php endforeach ?>
@@ -236,3 +240,28 @@
 		<?php endif ?>
 	</section>
 </div>
+<div class="modal fade" id="modal_ketentuan" style="display: none;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title">Ketentuan <strong><?= $layanan->ketentuan ?></strong></h4>
+			</div>
+			<div class="modal-body"></div>
+			<div class="modal-footer text-center">
+				<button type="button" class="btn btn-flat btn-sm btn-info" data-dismiss="modal">Tutup</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () { 
+		$("#modal_ketentuan").on("show.bs.modal", function(e) {
+			$(".pemesanan").modal("hide");
+			$(this).find(".modal-title").text($(e.relatedTarget).data("title"));
+			$(this).find(".modal-body").html($(e.relatedTarget).data("ketentuan"));
+		});
+    });
+</script>
